@@ -15,10 +15,13 @@
         android:roundIcon="@drawable/kypi_demo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".mvp.activities.MainActivity">
+
+
+        <activity
+            android:name=".mvp.activities.MainActivity"
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -27,7 +30,10 @@
         <activity
             android:name=".mvp.activities.IReadDemoActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".mvp.activities.MainMenuActivity" />
+
+        <activity
+            android:name=".mvp.activities.MainMenuActivity"
+            android:screenOrientation="landscape" />
     </application>
 
 </manifest>
