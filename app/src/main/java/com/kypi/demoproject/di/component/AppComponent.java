@@ -6,6 +6,7 @@ import com.kypi.demoproject.di.module.RemoteModule;
 import com.kypi.demoproject.di.module.RepositoryModule;
 import com.kypi.demoproject.di.module.SchedulerModule;
 import com.kypi.demoproject.domain.scheduler.SchedulerProvider;
+import com.kypi.demoproject.domain.usecase.GameConfigUseCase;
 import com.kypi.demoproject.domain.usecase.IReadDemoUseCase;
 
 import javax.inject.Singleton;
@@ -23,5 +24,7 @@ import dagger.Component;
         })
 public interface AppComponent {
     SchedulerProvider schedulerProvider();
+
     IReadDemoUseCase demoUseCase();
+    GameConfigUseCase gameConfigUseCase();
 }

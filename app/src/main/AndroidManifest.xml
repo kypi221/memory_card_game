@@ -27,6 +27,7 @@
         <activity
             android:name=".mvp.activities.IReadDemoActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".mvp.activities.MainMenuActivity" />
     </application>
 
 </manifest>

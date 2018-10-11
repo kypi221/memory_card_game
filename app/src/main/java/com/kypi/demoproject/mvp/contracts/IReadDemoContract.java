@@ -5,7 +5,7 @@ import com.kypi.demoproject.domain.entities.DemoObject;
 
 import java.util.List;
 
-public class IReadDemoContract {
+public interface IReadDemoContract {
 
     public interface View extends BaseContract.View {
         void showDemoObject(DemoObject demoObject);

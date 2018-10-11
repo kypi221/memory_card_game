@@ -34,7 +34,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void onActivityCreated(Bundle savedInstanceState) {
-        IReadDemoActivity.showMe(this);
+        MainMenuActivity.showMe(this);
         finish();
     }
 }
