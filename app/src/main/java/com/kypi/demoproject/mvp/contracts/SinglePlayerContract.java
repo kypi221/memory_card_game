@@ -15,6 +15,8 @@ public interface SinglePlayerContract {
 
         void updateSelectedCardStatus(int selectedFirst, int selectedSecond, int status);
 
+        void showVictory();
+
     }
 
     public interface Presenter extends BaseContract.BasePresenter<SinglePlayerContract.View> {

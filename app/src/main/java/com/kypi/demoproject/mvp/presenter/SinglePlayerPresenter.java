@@ -10,15 +10,18 @@ import com.kypi.demoproject.mvp.contracts.SinglePlayerContract;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
+
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 
 public class SinglePlayerPresenter extends BasePresenter<SinglePlayerContract.View> implements SinglePlayerContract.Presenter {
 
     public static final int STATUS_NONE = 0;            // Card đang úp xuống, chưa đụng chạm gì cả
     public static final int STATUS_FACE_UP = 1;         // Card đang lật lên, có thể là đã được chọn, hoặc được auto up
     public static final int STATUS_COMPLETE = 2;        // Card đã được chọn thành công
-
 
     private static final int[] resourceList = {
             R.drawable.image_1,
@@ -54,6 +57,8 @@ public class SinglePlayerPresenter extends BasePresenter<SinglePlayerContract.Vi
     private int firstSelected = -1;
     private int secondSelected = -1;
 
+    private int completedCount;
+
     private List<MemoryCard> memoryCards;
 
     @Inject
@@ -71,8 +76,7 @@ public class SinglePlayerPresenter extends BasePresenter<SinglePlayerContract.Vi
 
         // Tạo ra danh sách card
         memoryCards = gamePlayUseCase.createListCard(myArray);
-
-
+        completedCount = 0;
 
         // Nhỏ nhất
         if(memoryCards.size() == 20){
@@ -114,11 +118,27 @@ public class SinglePlayerPresenter extends BasePresenter<SinglePlayerContract.Vi
 
 
         if(memoryCards.get(firstSelected).resourceId == memoryCards.get(selectedIndex).resourceId){
-            getMvpView().updateSelectedCardStatus(firstSelected, selectedIndex, STATUS_COMPLETE);
+            if(completedCount == memoryCards.size() -2){
+                getMvpView().showVictory();
+                return;
+            }
+
+            Observable.defer(() -> Observable.just("")
+                    .delay(200, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+                    .doOnNext(ignore -> getMvpView().updateSelectedCardStatus(firstSelected, selectedIndex, STATUS_COMPLETE))
+                    .doOnNext(ignore -> firstSelected =  -1)
+                    .doOnNext(ignore -> firstSelected =  -1)
+                    .doOnNext(ignore -> completedCount += 2))
+                    .subscribe();
             return;
         }
 
-        getMvpView().updateSelectedCardStatus(firstSelected, selectedIndex, STATUS_NONE);
+
+        Observable.defer(() -> Observable.just("")
+                .delay(200, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+                .doOnNext(ignore -> getMvpView().updateSelectedCardStatus(firstSelected, selectedIndex, STATUS_NONE))
+                .doOnNext(ignore -> firstSelected =  -1))
+                .subscribe();
 
     }
 }
