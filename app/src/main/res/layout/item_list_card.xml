@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:gravity="center"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.wajahatkarim3.easyflipview.EasyFlipView
+
+        android:id="@+id/flipView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:flipDuration="400"
+        app:flipEnabled="true"
+        app:flipOnTouch="false">
+
+        <!-- Back Layout Goes Here -->
+        <include layout="@layout/item_flip_back" />
+
+        <!-- Front Layout Goes Here -->
+        <include layout="@layout/item_flip_front" />
+
+    </com.wajahatkarim3.easyflipview.EasyFlipView>
+
+</LinearLayout>

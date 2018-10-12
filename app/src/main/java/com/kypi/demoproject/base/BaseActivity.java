@@ -1,5 +1,6 @@
 package com.kypi.demoproject.base;
 
+import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
@@ -49,6 +50,9 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         // Change status bar to black color
         changeStatusBarColor();
         super.onCreate(savedInstanceState);
+
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         mActivityComponent = DaggerActivityComponent.builder()
                 .activityModule(new ActivityModule(this))
