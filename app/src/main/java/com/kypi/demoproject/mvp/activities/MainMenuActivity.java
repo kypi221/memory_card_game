@@ -122,6 +122,11 @@ public class MainMenuActivity extends BaseActivity implements MainMenuContract.V
         layoutSelector.setVisibility(View.GONE);
     }
 
+    @OnClick(R.id.btn_play)
+    public void startToPlay() {
+        SinglePlayerGameActivity.showMe(this);
+    }
+
     @OnClick({
             R.id.btn_level_1,
             R.id.btn_level_2,

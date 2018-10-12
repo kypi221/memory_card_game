@@ -34,6 +34,8 @@
         <activity
             android:name=".mvp.activities.MainMenuActivity"
             android:screenOrientation="landscape" />
+
+        <activity android:name=".mvp.activities.SinglePlayerGameActivity" android:screenOrientation="landscape" />
     </application>
 
 </manifest>

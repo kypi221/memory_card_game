@@ -6,6 +6,7 @@ import com.kypi.demoproject.di.module.ActivityModule;
 import com.kypi.demoproject.di.module.PresenterModule;
 import com.kypi.demoproject.di.scope.ActivityScope;
 import com.kypi.demoproject.mvp.activities.MainMenuActivity;
+import com.kypi.demoproject.mvp.activities.SinglePlayerGameActivity;
 
 import dagger.Component;
 
@@ -20,4 +21,7 @@ public interface ActivityComponent {
     void inject(IReadDemoActivity demoActivity);
 
     void inject(MainMenuActivity mainMenuActivity);
+
+    void inject(SinglePlayerGameActivity singlePlayerGameActivity);
+
 }
