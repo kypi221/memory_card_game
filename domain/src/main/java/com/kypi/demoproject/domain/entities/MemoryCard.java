@@ -1,6 +1,14 @@
 package com.kypi.demoproject.domain.entities;
 
 public class MemoryCard {
+
+    public enum Status{
+        None,
+        Complete,
+        ToolFaceUp,
+    }
+
+
     public int resourceId;
-    public int status = 0;
+    public Status status = Status.None;
 }

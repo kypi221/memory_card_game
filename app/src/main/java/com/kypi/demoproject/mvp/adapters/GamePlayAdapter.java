@@ -46,39 +46,6 @@ public class GamePlayAdapter extends RecyclerView.Adapter {
             ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
             MemoryCard item = listItems.get(position);
 
-            // Trạng thái none
-            if(item.status == 0){
-                if(itemViewHolder.layoutFlipView.getCurrentFlipState() == EasyFlipView.FlipState.FRONT_SIDE){
-                    itemViewHolder.layoutFlipView.setFlipDuration(0);
-                    itemViewHolder.layoutFlipView.flipTheView();
-                }
-            }
-            else if(item.status == 1){
-                if(itemViewHolder.layoutFlipView.getCurrentFlipState() == EasyFlipView.FlipState.BACK_SIDE){
-                    itemViewHolder.layoutFlipView.setFlipDuration(0);
-                    itemViewHolder.layoutFlipView.flipTheView();
-                }
-            }
-
-            itemViewHolder.imgIconCard.setImageResource(item.resourceId);
-
-
-            itemViewHolder.layoutFlipView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (item.status == 0) {
-                        item.status = 1;
-                    }
-                    else if (item.status == 1){
-                        item.status = 0;
-                    }
-                    else {
-                        return;
-                    }
-                    itemViewHolder.layoutFlipView.setFlipDuration(400);
-                    itemViewHolder.layoutFlipView.flipTheView();
-                }
-            });
         }
     }
 
