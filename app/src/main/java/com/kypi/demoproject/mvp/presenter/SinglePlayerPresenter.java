@@ -1,6 +1,8 @@
 package com.kypi.demoproject.mvp.presenter;
 
 import com.kypi.demoproject.R;
+import com.kypi.demoproject.app.rx.SimpleEmptyObserver;
+import com.kypi.demoproject.app.rx.SimpleObserver;
 import com.kypi.demoproject.base.BasePresenter;
 import com.kypi.demoproject.domain.entities.MemoryCard;
 import com.kypi.demoproject.domain.usecase.GameConfigUseCase;
@@ -129,7 +131,7 @@ public class SinglePlayerPresenter extends BasePresenter<SinglePlayerContract.Vi
                     .doOnNext(ignore -> firstSelected =  -1)
                     .doOnNext(ignore -> firstSelected =  -1)
                     .doOnNext(ignore -> completedCount += 2))
-                    .subscribe();
+                    .subscribeWith(new SimpleEmptyObserver<>());
             return;
         }
 
@@ -138,7 +140,7 @@ public class SinglePlayerPresenter extends BasePresenter<SinglePlayerContract.Vi
                 .delay(200, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
                 .doOnNext(ignore -> getMvpView().updateSelectedCardStatus(firstSelected, selectedIndex, STATUS_NONE))
                 .doOnNext(ignore -> firstSelected =  -1))
-                .subscribe();
+                .subscribeWith(new SimpleEmptyObserver<>());
 
     }
 }
