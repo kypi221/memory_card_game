@@ -56,9 +56,6 @@ public class SinglePlayerPresenter extends BasePresenter<SinglePlayerContract.Vi
     private final GameConfigUseCase gameConfigUseCase;
     private final GamePlayUseCase gamePlayUseCase;
 
-    private int firstSelected = -1;
-    private int secondSelected = -1;
-
     private int completedCount;
 
     private List<MemoryCard> memoryCards;
@@ -107,29 +104,54 @@ public class SinglePlayerPresenter extends BasePresenter<SinglePlayerContract.Vi
     @Override
     public void selectedCard(int selectedIndex) {
         // Nếu chọn lại cái card vừa chọn thì ko làm gì cả
-        if(firstSelected == selectedIndex){
-            return;
-        }
+//        if(firstSelected == selectedIndex){
+//            return;
+//        }
+//
+//        // Nếu chưa chọn card đầu thì chọn card đầu
+//        if(firstSelected == -1){
+//            firstSelected = selectedIndex;
+//            getMvpView().updateSelectedCardStatus(firstSelected, secondSelected, STATUS_FACE_UP );
+//            return;
+//        }
+//
+//
+//        if(memoryCards.get(firstSelected).resourceId == memoryCards.get(selectedIndex).resourceId){
+//            if(completedCount == memoryCards.size() -2){
+//                getMvpView().showVictory();
+//                return;
+//            }
+//
+//            Observable.defer(() -> Observable.just("")
+//                    .delay(200, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+//                    .doOnNext(ignore -> getMvpView().updateSelectedCardStatus(firstSelected, selectedIndex, STATUS_COMPLETE))
+//                    .doOnNext(ignore -> firstSelected =  -1)
+//                    .doOnNext(ignore -> firstSelected =  -1)
+//                    .doOnNext(ignore -> completedCount += 2))
+//                    .subscribeWith(new SimpleEmptyObserver<>());
+//            return;
+//        }
+//
+//
+//        Observable.defer(() -> Observable.just("")
+//                .delay(200, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+//                .doOnNext(ignore -> getMvpView().updateSelectedCardStatus(firstSelected, selectedIndex, STATUS_NONE))
+//                .doOnNext(ignore -> firstSelected =  -1))
+//                .subscribeWith(new SimpleEmptyObserver<>());
 
-        // Nếu chưa chọn card đầu thì chọn card đầu
-        if(firstSelected == -1){
-            firstSelected = selectedIndex;
-            getMvpView().updateSelectedCardStatus(firstSelected, secondSelected, STATUS_FACE_UP );
-            return;
-        }
+    }
 
-
-        if(memoryCards.get(firstSelected).resourceId == memoryCards.get(selectedIndex).resourceId){
+    @Override
+    public void checkCard(int firstIndex, int secondIndex) {
+        if(memoryCards.get(firstIndex).resourceId == memoryCards.get(secondIndex).resourceId){
             if(completedCount == memoryCards.size() -2){
                 getMvpView().showVictory();
                 return;
             }
 
             Observable.defer(() -> Observable.just("")
-                    .delay(200, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-                    .doOnNext(ignore -> getMvpView().updateSelectedCardStatus(firstSelected, selectedIndex, STATUS_COMPLETE))
-                    .doOnNext(ignore -> firstSelected =  -1)
-                    .doOnNext(ignore -> firstSelected =  -1)
+                    .delay(600, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+                    .doOnNext(ignore -> getMvpView().updateSelectedCardStatus(firstIndex, secondIndex, STATUS_COMPLETE))
                     .doOnNext(ignore -> completedCount += 2))
                     .subscribeWith(new SimpleEmptyObserver<>());
             return;
@@ -137,10 +159,8 @@ public class SinglePlayerPresenter extends BasePresenter<SinglePlayerContract.Vi
 
 
         Observable.defer(() -> Observable.just("")
-                .delay(200, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-                .doOnNext(ignore -> getMvpView().updateSelectedCardStatus(firstSelected, selectedIndex, STATUS_NONE))
-                .doOnNext(ignore -> firstSelected =  -1))
+                .delay(600, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+                .doOnNext(ignore -> getMvpView().updateSelectedCardStatus(firstIndex, secondIndex, STATUS_NONE)))
                 .subscribeWith(new SimpleEmptyObserver<>());
-
     }
 }

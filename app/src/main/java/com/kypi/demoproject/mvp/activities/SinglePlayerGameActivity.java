@@ -105,9 +105,6 @@ public class SinglePlayerGameActivity extends BaseActivity implements SinglePlay
 
         // Trạng thái none
         if(status == 0){
-            Log.d("KhoaHM", "firstItem = " + firstItem.getCurrentFlipState());
-            Log.d("KhoaHM", "secondItem = " + secondItem.getCurrentFlipState());
-
             if(firstItem != null && firstItem.getCurrentFlipState() == EasyFlipView.FlipState.FRONT_SIDE){
                 firstItem.setFlipDuration(400);
                 firstItem.flipTheView();
@@ -182,18 +179,32 @@ public class SinglePlayerGameActivity extends BaseActivity implements SinglePlay
         layoutFlipView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MemoryCard item = (MemoryCard) v.getTag(R.id.tag_object);
-                if (item.status == 0) {
-                    item.status = 1;
-                }
-                else if (item.status == 1){
-                    item.status = 0;
-                }
-                else {
+
+                // Lấy vị trí ra
+                int position = (int) v.getTag(R.id.tag_position);
+
+                // Nếu chưa có vị trí 1 thì set đây là vị trí 1
+                if(firstIndex == -1){
+                    firstIndex = position;
+                    // Flip effect
+                    layoutFlipView.setFlipDuration(400);
+                    layoutFlipView.flipTheView();
                     return;
                 }
+
+                if(position == firstIndex){
+                    return;
+                }
+
+                // Flip effect
                 layoutFlipView.setFlipDuration(400);
                 layoutFlipView.flipTheView();
+
+                // nếu có rồi thì gọi animation check và
+                presenter.checkCard(firstIndex, position);
+
+                firstIndex = -1;
+
             }
         });
 
@@ -210,4 +221,6 @@ public class SinglePlayerGameActivity extends BaseActivity implements SinglePlay
 
         return layoutFlipView;
     }
+
+    private int firstIndex;
 }

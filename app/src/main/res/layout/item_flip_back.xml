@@ -5,13 +5,12 @@
     android:layout_height="wrap_content"
     android:gravity="center"
     android:layout_gravity="center"
-    android:layout_margin="1dp"
+    android:layout_margin="2dp"
     android:background="@color/colorAccent"
     android:orientation="vertical">
 
     <ImageView
-        android:src="@drawable/image_1"
-        android:visibility="invisible"
+        android:src="@drawable/img_question_mark"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

@@ -25,5 +25,6 @@ public interface SinglePlayerContract {
         void selectedCard(int selectedIndex);
 
 
+        void checkCard(int firstIndex, int secondIndex);
     }
 }
