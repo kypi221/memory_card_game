@@ -1,9 +1,7 @@
 package com.kypi.demoproject.mvp.activities;
 
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,12 +19,10 @@ import com.wajahatkarim3.easyflipview.EasyFlipView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
-import io.reactivex.Observable;
 
 public class SinglePlayerGameActivity extends BaseActivity implements SinglePlayerContract.View {
 
@@ -36,14 +32,15 @@ public class SinglePlayerGameActivity extends BaseActivity implements SinglePlay
     @Inject
     SinglePlayerPresenter presenter;
 
+    // Danh sách cái view đang đc dùng
     private List<EasyFlipView> listViewManager;
 
+    private int firstIndex;
 
     public static void showMe(BaseActivity activity) {
         Intent intent = new Intent(activity, SinglePlayerGameActivity.class);
         activity.startActivity(intent);
     }
-
 
     /**
      * get layoutEyeProtection to inflate
@@ -77,12 +74,12 @@ public class SinglePlayerGameActivity extends BaseActivity implements SinglePlay
         for (int i = 0; i < listCard.size(); i++) {
 
             // Bắt đầu 1 dòng mới
-            if(i % colum == 0){
+            if (i % colum == 0) {
                 layoutRow = createNewRow();
             }
 
             // Add vào danh sách quản lý
-            listViewManager.add(createViewHolder(layoutRow, listCard.get(i), i));
+            listViewManager.add(createViewItem(layoutRow, listCard.get(i), i));
         }
     }
 
@@ -96,56 +93,61 @@ public class SinglePlayerGameActivity extends BaseActivity implements SinglePlay
 
         EasyFlipView firstItem = null;
         EasyFlipView secondItem = null;
-        if(selectedFirst != -1){
+        if (selectedFirst != -1) {
             firstItem = listViewManager.get(selectedFirst);
         }
-        if(selectedSecond != -1){
+        if (selectedSecond != -1) {
             secondItem = listViewManager.get(selectedSecond);
         }
 
         // Trạng thái none
-        if(status == 0){
-            if(firstItem != null && firstItem.getCurrentFlipState() == EasyFlipView.FlipState.FRONT_SIDE){
+        if (status == 0) {
+            if (firstItem != null && firstItem.getCurrentFlipState() == EasyFlipView.FlipState.FRONT_SIDE) {
                 firstItem.setFlipDuration(400);
                 firstItem.flipTheView();
             }
 
-            if(secondItem != null && secondItem.getCurrentFlipState() == EasyFlipView.FlipState.FRONT_SIDE){
+            if (secondItem != null && secondItem.getCurrentFlipState() == EasyFlipView.FlipState.FRONT_SIDE) {
                 secondItem.setFlipDuration(400);
                 secondItem.flipTheView();
             }
-        }
-        else if(status == 1){
-            if(firstItem != null && firstItem.getCurrentFlipState() == EasyFlipView.FlipState.BACK_SIDE){
+        } else if (status == 1) {
+            if (firstItem != null && firstItem.getCurrentFlipState() == EasyFlipView.FlipState.BACK_SIDE) {
                 firstItem.setFlipDuration(400);
                 firstItem.flipTheView();
             }
 
-            if(secondItem != null && secondItem.getCurrentFlipState() == EasyFlipView.FlipState.BACK_SIDE){
+            if (secondItem != null && secondItem.getCurrentFlipState() == EasyFlipView.FlipState.BACK_SIDE) {
                 secondItem.setFlipDuration(400);
                 secondItem.flipTheView();
             }
-        }
-        else {
-            firstItem.setVisibility(View.INVISIBLE);
-            firstItem.setOnClickListener(null);
-            secondItem.setVisibility(View.INVISIBLE);
-            secondItem.setOnClickListener(null);
+        } else {
+            if (firstItem != null) {
+                firstItem.setVisibility(View.INVISIBLE);
+                firstItem.setOnClickListener(null);
+            }
+
+            if (secondItem != null) {
+                secondItem.setVisibility(View.INVISIBLE);
+                secondItem.setOnClickListener(null);
+            }
+
         }
     }
 
     @Override
     public void showVictory() {
-        CustomToast.showSuccessMgs(this, "You Win !" );
+        CustomToast.showSuccessMgs(this, "You Win !");
         finish();
     }
 
 
     /**
      * Tạo 1 dòng mới
+     *
      * @return
      */
-    private LinearLayout createNewRow(){
+    private LinearLayout createNewRow() {
         LinearLayout layoutRow = new LinearLayout(this);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0);
         layoutParams.weight = 1;
@@ -155,7 +157,15 @@ public class SinglePlayerGameActivity extends BaseActivity implements SinglePlay
     }
 
 
-    private EasyFlipView createViewHolder(LinearLayout layoutRow, MemoryCard item, int index){
+    /**
+     * Tạo ra các phần tử card trong ma trận
+     *
+     * @param layoutRow
+     * @param item
+     * @param index
+     * @return
+     */
+    private EasyFlipView createViewItem(LinearLayout layoutRow, MemoryCard item, int index) {
 
         // Tạo ra view item
         View itemView = LayoutInflater.from(this).inflate(R.layout.item_list_card, null, false);
@@ -183,44 +193,30 @@ public class SinglePlayerGameActivity extends BaseActivity implements SinglePlay
                 // Lấy vị trí ra
                 int position = (int) v.getTag(R.id.tag_position);
 
-                // Nếu chưa có vị trí 1 thì set đây là vị trí 1
-                if(firstIndex == -1){
-                    firstIndex = position;
-                    // Flip effect
-                    layoutFlipView.setFlipDuration(400);
-                    layoutFlipView.flipTheView();
+                // Nếu position bằng với vị trí click đầu thì ko làm gì
+                if (position == firstIndex) {
                     return;
                 }
 
-                if(position == firstIndex){
-                    return;
-                }
-
-                // Flip effect
+                // Lật view nếu trạng thái đang là chưa lật
                 layoutFlipView.setFlipDuration(400);
                 layoutFlipView.flipTheView();
 
-                // nếu có rồi thì gọi animation check và
-                presenter.checkCard(firstIndex, position);
 
+                // Lần đầu click thì chỉ thực hiện animation lật ( nếu đang úp )
+                if (firstIndex == -1) {
+                    firstIndex = position;
+                    return;
+                }
+
+                // nếu có rồi thì gọi check và
+                presenter.checkCard(firstIndex, position);
                 firstIndex = -1;
 
-            }
-        });
-
-
-        layoutFlipView.setOnFlipListener(new EasyFlipView.OnFlipAnimationListener() {
-            @Override
-            public void onViewFlipCompleted(EasyFlipView easyFlipView, EasyFlipView.FlipState newCurrentSide) {
-                if(newCurrentSide == EasyFlipView.FlipState.FRONT_SIDE){
-                    int position = (int) easyFlipView.getTag(R.id.tag_position);
-                    presenter.selectedCard(position);
-                }
             }
         });
 
         return layoutFlipView;
     }
 
-    private int firstIndex;
 }

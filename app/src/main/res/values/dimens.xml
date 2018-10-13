@@ -41,4 +41,11 @@
     <dimen name="margin_36">36dp</dimen>
     <dimen name="margin_48">48dp</dimen>
 
+
+
+    <dimen name="game_margin_small">15px</dimen>
+    <dimen name="game_margin_medium">40px</dimen>
+    <dimen name="game_margin_large">70px</dimen>
+    <dimen name="game_margin_xlarge">100px</dimen>
+
 </resources>
