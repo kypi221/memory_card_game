@@ -7,16 +7,25 @@
     android:orientation="vertical">
 
     <RelativeLayout
-        android:layout_margin="2dp"
         android:background="@color/colorAccent"
         android:layout_width="match_parent"
+        android:layout_margin="1dp"
         android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/layout_selected"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:layout_height="match_parent"
+            android:background="@color/red"></RelativeLayout>
 
         <com.wajahatkarim3.easyflipview.EasyFlipView
 
             android:id="@+id/flipView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            android:background="@color/home_divider"
             app:flipDuration="400"
             app:flipEnabled="true"
             app:flipOnTouch="false">

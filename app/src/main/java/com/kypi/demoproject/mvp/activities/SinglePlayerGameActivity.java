@@ -86,7 +86,6 @@ public class SinglePlayerGameActivity extends BaseActivity implements SinglePlay
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
         presenter.detachView();
     }
 
@@ -134,14 +133,17 @@ public class SinglePlayerGameActivity extends BaseActivity implements SinglePlay
         EasyFlipView secondItem = null;
         if (selectedFirst != -1) {
             firstItem = listViewManager.get(selectedFirst);
+            ViewGroup viewSelected = (ViewGroup) firstItem.getTag(R.id.tag_view);
+            viewSelected.setVisibility(View.GONE);
         }
         if (selectedSecond != -1) {
             secondItem = listViewManager.get(selectedSecond);
+            ViewGroup viewSelected = (ViewGroup) secondItem.getTag(R.id.tag_view);
+            viewSelected.setVisibility(View.GONE);
         }
 
         // Trạng thái none
         if (status == 0) {
-            CardHelper.faceDownCard(firstItem);
             MemoryCard memoryCard1 = (MemoryCard) firstItem.getTag(R.id.tag_object);
             if(memoryCard1.status != MemoryCard.Status.ToolFaceUp){
                 CardHelper.faceDownCard(firstItem);
@@ -200,7 +202,6 @@ public class SinglePlayerGameActivity extends BaseActivity implements SinglePlay
         firstCard.status = MemoryCard.Status.ToolFaceUp;
         secondCard.status = MemoryCard.Status.ToolFaceUp;
 
-
         firstView.setFlipDuration(400);
         firstView.flipTheView();
 
@@ -214,10 +215,6 @@ public class SinglePlayerGameActivity extends BaseActivity implements SinglePlay
         presenter.openRandom();
         view.setVisibility(View.INVISIBLE);
     }
-
-
-
-
 
 
     /**
@@ -249,15 +246,16 @@ public class SinglePlayerGameActivity extends BaseActivity implements SinglePlay
         View itemView = LayoutInflater.from(this).inflate(R.layout.item_list_card, null, false);
         EasyFlipView layoutFlipView = itemView.findViewById(R.id.flipView);
         ImageView imageView = itemView.findViewById(R.id.img_icon_card);
+        ViewGroup layoutSelected = itemView.findViewById(R.id.layout_selected);
 
         // Set hình ảnh vào mặt dưới
         imageView.setImageResource(item.resourceId);
         layoutFlipView.setTag(R.id.tag_object, item);
         layoutFlipView.setTag(R.id.tag_position, index);
+        layoutFlipView.setTag(R.id.tag_view, layoutSelected);
 
         layoutFlipView.setFlipDuration(0);
         layoutFlipView.flipTheView();
-
 
         // Add View Item vào Row
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -268,6 +266,7 @@ public class SinglePlayerGameActivity extends BaseActivity implements SinglePlay
 
             // Lấy vị trí ra
             int position = (int) v.getTag(R.id.tag_position);
+            ViewGroup viewSelected = (ViewGroup) v.getTag(R.id.tag_view);
 
             // Nếu position bằng với vị trí click đầu thì ko làm gì
             if (position == firstIndex) {
@@ -275,6 +274,8 @@ public class SinglePlayerGameActivity extends BaseActivity implements SinglePlay
             }
 
             CardHelper.faceUpCard(layoutFlipView);
+
+            viewSelected.setVisibility(View.VISIBLE);
 
             // Lần đầu click thì chỉ thực hiện animation lật ( nếu đang úp )
             if (firstIndex == -1) {
