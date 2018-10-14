@@ -246,6 +246,11 @@ public class SinglePlayerGameActivity extends BaseActivity implements SinglePlay
         view.setVisibility(View.INVISIBLE);
     }
 
+    @OnClick({R.id.tv_exit, R.id.tv_replay})
+    public void exitClicked(View view){
+        onBackPressed();
+    }
+
 
     /**
      * Tạo 1 dòng mới
