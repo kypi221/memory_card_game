@@ -182,6 +182,49 @@ public class SinglePlayerPresenter extends BasePresenter<SinglePlayerContract.Vi
 
     }
 
+    @Override
+    public void removeRandomCouple() {
+
+        // Tạo ra 1 danh sách tạm chứa tất cả các index còn lại của thẻ
+        List<Integer> listIndexOfCard = new ArrayList<>();
+        for (int i = 0; i < memoryCards.size(); i++) {
+            if(memoryCards.get(i).status != MemoryCard.Status.Complete){
+                listIndexOfCard.add(i);
+            }
+        }
+
+        // Nếu số lượng ít hơn 2, có nghĩa là game đã kết thúc
+        if(listIndexOfCard.size() < 2){
+            return;
+        }
+
+        // Random danh sách index
+        Collections.shuffle(listIndexOfCard);
+
+        // Lấy ra index đầu tiên và đi tìm index của card có cùng resourceId
+        int firstIndex = listIndexOfCard.get(0);
+        MemoryCard current = memoryCards.get(firstIndex);
+
+        int secondIndex = -1;
+
+        for (int i = 1; i < listIndexOfCard.size(); i++) {
+            secondIndex = listIndexOfCard.get(i);
+
+            MemoryCard tempCard = memoryCards.get(secondIndex);
+            if(current.resourceId == tempCard.resourceId){
+
+                // Trả về index của 1 cặp vừa tìm đc
+                getMvpView().toolRemoveCouple(firstIndex, secondIndex) ;
+                addPoint(100);
+                completedCount += 2;
+                memoryCards.get(firstIndex).status = MemoryCard.Status.Complete;
+                memoryCards.get(secondIndex).status = MemoryCard.Status.Complete;
+                return;
+            }
+
+        }
+    }
+
     private void addPoint(int point) {
         currentPoint += point;
         getMvpView().showPoint(currentPoint);

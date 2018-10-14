@@ -209,10 +209,34 @@ public class SinglePlayerGameActivity extends BaseActivity implements SinglePlay
         secondView.flipTheView();
     }
 
+    @Override
+    public void toolRemoveCouple(int firstIndex, int secondIndex) {
+        EasyFlipView firstView = listViewManager.get(firstIndex);
+        EasyFlipView secondView = listViewManager.get(secondIndex);
+
+        if (firstView != null) {
+            firstView.setVisibility(View.INVISIBLE);
+            firstView.setOnClickListener(null);
+        }
+
+        if (secondView != null) {
+            secondView.setVisibility(View.INVISIBLE);
+            secondView.setOnClickListener(null);
+        }
+
+    }
+
 
     @OnClick(R.id.tv_help_1)
     public void help1Clicked(View view){
         presenter.openRandom();
+        view.setVisibility(View.INVISIBLE);
+    }
+
+
+    @OnClick(R.id.tv_help_2)
+    public void help2Clicked(View view){
+        presenter.removeRandomCouple();
         view.setVisibility(View.INVISIBLE);
     }
 

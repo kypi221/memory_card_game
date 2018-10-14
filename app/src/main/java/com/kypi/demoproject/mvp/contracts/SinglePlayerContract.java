@@ -24,6 +24,8 @@ public interface SinglePlayerContract {
         void showCurrentGameLevel(int level);
 
         void toolFaceUp(int firstItem, int secondItem);
+
+        void toolRemoveCouple(int firstIndex, int secondIndex);
     }
 
     public interface Presenter extends BaseContract.BasePresenter<SinglePlayerContract.View> {
@@ -33,5 +35,6 @@ public interface SinglePlayerContract {
 
         void openRandom();
 
+        void removeRandomCouple();
     }
 }
