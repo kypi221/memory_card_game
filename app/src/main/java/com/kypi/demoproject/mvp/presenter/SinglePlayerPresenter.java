@@ -11,6 +11,7 @@ import com.kypi.demoproject.domain.usecase.GamePlayUseCase;
 import com.kypi.demoproject.mvp.contracts.SinglePlayerContract;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -27,7 +28,6 @@ public class SinglePlayerPresenter extends BasePresenter<SinglePlayerContract.Vi
     public static final int STATUS_NONE = 0;            // Card đang úp xuống, chưa đụng chạm gì cả
     public static final int STATUS_FACE_UP = 1;         // Card đang lật lên, có thể là đã được chọn, hoặc được auto up
     public static final int STATUS_COMPLETE = 2;        // Card đã được chọn thành công
-
 
     private CompositeDisposable updateTime;
 
@@ -143,7 +143,11 @@ public class SinglePlayerPresenter extends BasePresenter<SinglePlayerContract.Vi
                     .delay(600, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
                     .doOnNext(ignore -> getMvpView().updateSelectedCardStatus(firstIndex, secondIndex, STATUS_COMPLETE))
                     .doOnNext(ignore -> addPoint(100))
-                    .doOnNext(ignore -> completedCount += 2))
+                    .doOnNext(ignore -> completedCount += 2)
+                    .doOnNext(ignore -> {
+                        memoryCards.get(firstIndex).status = MemoryCard.Status.Complete;
+                        memoryCards.get(secondIndex).status = MemoryCard.Status.Complete;
+                    }))
                     .subscribeWith(new SimpleEmptyObserver<>());
             return;
         }
@@ -153,6 +157,29 @@ public class SinglePlayerPresenter extends BasePresenter<SinglePlayerContract.Vi
                 .delay(600, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
                 .doOnNext(ignore -> getMvpView().updateSelectedCardStatus(firstIndex, secondIndex, STATUS_NONE)))
                 .subscribeWith(new SimpleEmptyObserver<>());
+    }
+
+    @Override
+    public void openRandom() {
+        List<Integer> listTemp = new ArrayList<>();
+
+        for (int i = 0; i < memoryCards.size(); i++) {
+            if(memoryCards.get(i).status != MemoryCard.Status.Complete){
+                listTemp.add(i);
+            }
+        }
+
+        if(listTemp.size() < 2){
+            return;
+        }
+
+        Collections.shuffle(listTemp);
+
+        int firstItem = listTemp.get(0);
+        int secondItem = listTemp.get(1);
+
+        getMvpView().toolFaceUp(firstItem, secondItem);
+
     }
 
     private void addPoint(int point) {

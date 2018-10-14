@@ -22,11 +22,16 @@ public interface SinglePlayerContract {
         void showPoint(int currentPoint);
 
         void showCurrentGameLevel(int level);
+
+        void toolFaceUp(int firstItem, int secondItem);
     }
 
     public interface Presenter extends BaseContract.BasePresenter<SinglePlayerContract.View> {
         void loadGame();
 
         void checkCard(int firstIndex, int secondIndex);
+
+        void openRandom();
+
     }
 }

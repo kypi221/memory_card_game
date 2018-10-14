@@ -15,6 +15,7 @@ import com.kypi.demoproject.di.component.ActivityComponent;
 import com.kypi.demoproject.domain.entities.MemoryCard;
 import com.kypi.demoproject.mvp.contracts.SinglePlayerContract;
 import com.kypi.demoproject.mvp.presenter.SinglePlayerPresenter;
+import com.kypi.demoproject.utils.helper.CardHelper;
 import com.kypi.demoproject.widget.CustomToast;
 import com.wajahatkarim3.easyflipview.EasyFlipView;
 
@@ -24,6 +25,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 public class SinglePlayerGameActivity extends BaseActivity implements SinglePlayerContract.View {
 
@@ -50,7 +52,7 @@ public class SinglePlayerGameActivity extends BaseActivity implements SinglePlay
     // Danh sách cái view đang đc dùng
     private List<EasyFlipView> listViewManager;
 
-    private int firstIndex;
+    private int firstIndex = -1;
 
     public static void showMe(BaseActivity activity) {
         Intent intent = new Intent(activity, SinglePlayerGameActivity.class);
@@ -90,6 +92,8 @@ public class SinglePlayerGameActivity extends BaseActivity implements SinglePlay
 
     @Override
     public void showGame(List<MemoryCard> listCard, int colum) {
+        firstIndex = -1;
+
         listViewManager = new ArrayList<>();
         layoutGrid.removeAllViews();
         LinearLayout layoutRow = null;
@@ -137,25 +141,19 @@ public class SinglePlayerGameActivity extends BaseActivity implements SinglePlay
 
         // Trạng thái none
         if (status == 0) {
-            if (firstItem != null && firstItem.getCurrentFlipState() == EasyFlipView.FlipState.FRONT_SIDE) {
-                firstItem.setFlipDuration(400);
-                firstItem.flipTheView();
+            CardHelper.faceDownCard(firstItem);
+            MemoryCard memoryCard1 = (MemoryCard) firstItem.getTag(R.id.tag_object);
+            if(memoryCard1.status != MemoryCard.Status.ToolFaceUp){
+                CardHelper.faceDownCard(firstItem);
             }
 
-            if (secondItem != null && secondItem.getCurrentFlipState() == EasyFlipView.FlipState.FRONT_SIDE) {
-                secondItem.setFlipDuration(400);
-                secondItem.flipTheView();
+            MemoryCard memoryCard2 = (MemoryCard) secondItem.getTag(R.id.tag_object);
+            if(memoryCard2.status != MemoryCard.Status.ToolFaceUp){
+                CardHelper.faceDownCard(secondItem);
             }
         } else if (status == 1) {
-            if (firstItem != null && firstItem.getCurrentFlipState() == EasyFlipView.FlipState.BACK_SIDE) {
-                firstItem.setFlipDuration(400);
-                firstItem.flipTheView();
-            }
-
-            if (secondItem != null && secondItem.getCurrentFlipState() == EasyFlipView.FlipState.BACK_SIDE) {
-                secondItem.setFlipDuration(400);
-                secondItem.flipTheView();
-            }
+            CardHelper.faceUpCard(firstItem);
+            CardHelper.faceUpCard(secondItem);
         } else {
             if (firstItem != null) {
                 firstItem.setVisibility(View.INVISIBLE);
@@ -166,9 +164,6 @@ public class SinglePlayerGameActivity extends BaseActivity implements SinglePlay
                 secondItem.setVisibility(View.INVISIBLE);
                 secondItem.setOnClickListener(null);
             }
-
-
-
         }
     }
 
@@ -193,6 +188,37 @@ public class SinglePlayerGameActivity extends BaseActivity implements SinglePlay
     public void showCurrentGameLevel(int level) {
         tvCurrentLevel.setText(String.valueOf(level));
     }
+
+    @Override
+    public void toolFaceUp(int firstItem, int secondItem) {
+        EasyFlipView firstView = listViewManager.get(firstItem);
+        EasyFlipView secondView = listViewManager.get(secondItem);
+
+        MemoryCard firstCard = (MemoryCard) firstView.getTag(R.id.tag_object);
+        MemoryCard secondCard = (MemoryCard) secondView.getTag(R.id.tag_object);
+
+        firstCard.status = MemoryCard.Status.ToolFaceUp;
+        secondCard.status = MemoryCard.Status.ToolFaceUp;
+
+
+        firstView.setFlipDuration(400);
+        firstView.flipTheView();
+
+        secondView.setFlipDuration(400);
+        secondView.flipTheView();
+    }
+
+
+    @OnClick(R.id.tv_help_1)
+    public void help1Clicked(View view){
+        presenter.openRandom();
+        view.setVisibility(View.INVISIBLE);
+    }
+
+
+
+
+
 
     /**
      * Tạo 1 dòng mới
@@ -248,10 +274,7 @@ public class SinglePlayerGameActivity extends BaseActivity implements SinglePlay
                 return;
             }
 
-            // Lật view nếu trạng thái đang là chưa lật
-            layoutFlipView.setFlipDuration(400);
-            layoutFlipView.flipTheView();
-
+            CardHelper.faceUpCard(layoutFlipView);
 
             // Lần đầu click thì chỉ thực hiện animation lật ( nếu đang úp )
             if (firstIndex == -1) {
@@ -264,6 +287,7 @@ public class SinglePlayerGameActivity extends BaseActivity implements SinglePlay
             firstIndex = -1;
 
         });
+
 
         return layoutFlipView;
     }

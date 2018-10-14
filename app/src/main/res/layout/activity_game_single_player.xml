@@ -158,21 +158,21 @@
                         style="@style/GameHelpText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Trợ giúp" />
+                        android:text="Lật ô" />
 
                     <TextView
                         android:id="@+id/tv_help_2"
                         style="@style/GameHelpText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Trợ giúp" />
+                        android:text="Mất ô" />
 
                     <TextView
                         android:id="@+id/tv_help_3"
                         style="@style/GameHelpText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Trợ giúp" />
+                        android:text="Thêm 5s" />
 
                 </LinearLayout>
 
