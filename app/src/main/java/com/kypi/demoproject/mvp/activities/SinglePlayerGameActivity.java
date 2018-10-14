@@ -240,6 +240,12 @@ public class SinglePlayerGameActivity extends BaseActivity implements SinglePlay
         view.setVisibility(View.INVISIBLE);
     }
 
+    @OnClick(R.id.tv_help_3)
+    public void help3Clicked(View view){
+        presenter.addTime();
+        view.setVisibility(View.INVISIBLE);
+    }
+
 
     /**
      * Tạo 1 dòng mới

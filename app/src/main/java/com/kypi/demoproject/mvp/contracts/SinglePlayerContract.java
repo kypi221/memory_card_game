@@ -36,5 +36,8 @@ public interface SinglePlayerContract {
         void openRandom();
 
         void removeRandomCouple();
+
+        void addTime();
+
     }
 }

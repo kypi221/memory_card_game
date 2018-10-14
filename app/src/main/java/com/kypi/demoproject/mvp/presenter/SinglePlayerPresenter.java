@@ -221,8 +221,12 @@ public class SinglePlayerPresenter extends BasePresenter<SinglePlayerContract.Vi
                 memoryCards.get(secondIndex).status = MemoryCard.Status.Complete;
                 return;
             }
-
         }
+    }
+
+    @Override
+    public void addTime() {
+        settingTime += 5;
     }
 
     private void addPoint(int point) {
