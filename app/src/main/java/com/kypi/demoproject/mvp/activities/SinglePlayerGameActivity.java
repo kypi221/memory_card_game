@@ -37,6 +37,11 @@ public class SinglePlayerGameActivity extends BaseActivity implements SinglePlay
 
     @BindView(R.id.tv_time_left)
     TextView tvTimeLeft;
+    @BindView(R.id.tv_current_point)
+    TextView tvCurrentPoint;
+
+    @BindView(R.id.tv_current_level)
+    TextView tvCurrentLevel;
 
 
     @Inject
@@ -162,6 +167,8 @@ public class SinglePlayerGameActivity extends BaseActivity implements SinglePlay
                 secondItem.setOnClickListener(null);
             }
 
+
+
         }
     }
 
@@ -177,6 +184,15 @@ public class SinglePlayerGameActivity extends BaseActivity implements SinglePlay
         finish();
     }
 
+    @Override
+    public void showPoint(int point) {
+        tvCurrentPoint.setText(String.valueOf(point));
+    }
+
+    @Override
+    public void showCurrentGameLevel(int level) {
+        tvCurrentLevel.setText(String.valueOf(level));
+    }
 
     /**
      * Tạo 1 dòng mới

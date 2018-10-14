@@ -208,6 +208,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/game_margin_medium"
+                android:textAllCaps="false"
                 android:text="Thời Gian" />
 
         </LinearLayout>

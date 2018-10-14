@@ -18,6 +18,10 @@ public interface SinglePlayerContract {
         void showVictory();
 
         void showLose();
+
+        void showPoint(int currentPoint);
+
+        void showCurrentGameLevel(int level);
     }
 
     public interface Presenter extends BaseContract.BasePresenter<SinglePlayerContract.View> {

@@ -4,6 +4,7 @@ import com.kypi.demoproject.R;
 import com.kypi.demoproject.app.rx.SimpleEmptyObserver;
 import com.kypi.demoproject.app.rx.SimpleObserver;
 import com.kypi.demoproject.base.BasePresenter;
+import com.kypi.demoproject.domain.DomainConfig;
 import com.kypi.demoproject.domain.entities.MemoryCard;
 import com.kypi.demoproject.domain.usecase.GameConfigUseCase;
 import com.kypi.demoproject.domain.usecase.GamePlayUseCase;
@@ -70,6 +71,7 @@ public class SinglePlayerPresenter extends BasePresenter<SinglePlayerContract.Vi
     private List<MemoryCard> memoryCards;
     private long settingTime;
     private long startTime;
+    private int currentPoint;
 
     @Inject
     public SinglePlayerPresenter(GameConfigUseCase gameConfigUseCase, GamePlayUseCase gamePlayUseCase){
@@ -85,6 +87,13 @@ public class SinglePlayerPresenter extends BasePresenter<SinglePlayerContract.Vi
 
     @Override
     public void loadGame() {
+
+        // Hiển thị các config của game
+        currentPoint = 0;
+        int level = gameConfigUseCase.getSettingLevel();
+        getMvpView().showPoint(currentPoint);
+        getMvpView().showCurrentGameLevel(level);
+
 
         updateTime = new CompositeDisposable();
 
@@ -118,6 +127,7 @@ public class SinglePlayerPresenter extends BasePresenter<SinglePlayerContract.Vi
         }
 
         startGameTimer();
+
     }
 
     @Override
@@ -132,6 +142,7 @@ public class SinglePlayerPresenter extends BasePresenter<SinglePlayerContract.Vi
             Observable.defer(() -> Observable.just("")
                     .delay(600, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
                     .doOnNext(ignore -> getMvpView().updateSelectedCardStatus(firstIndex, secondIndex, STATUS_COMPLETE))
+                    .doOnNext(ignore -> addPoint(100))
                     .doOnNext(ignore -> completedCount += 2))
                     .subscribeWith(new SimpleEmptyObserver<>());
             return;
@@ -142,6 +153,11 @@ public class SinglePlayerPresenter extends BasePresenter<SinglePlayerContract.Vi
                 .delay(600, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
                 .doOnNext(ignore -> getMvpView().updateSelectedCardStatus(firstIndex, secondIndex, STATUS_NONE)))
                 .subscribeWith(new SimpleEmptyObserver<>());
+    }
+
+    private void addPoint(int point) {
+        currentPoint += point;
+        getMvpView().showPoint(currentPoint);
     }
 
     private void startGameTimer(){
