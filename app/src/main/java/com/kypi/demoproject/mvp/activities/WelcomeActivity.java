@@ -2,25 +2,32 @@ package com.kypi.demoproject.mvp.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.TextView;
+import android.widget.Button;
 
 import com.kypi.demoproject.R;
 import com.kypi.demoproject.base.BaseActivity;
 import com.kypi.demoproject.di.component.ActivityComponent;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
-public class MainActivity extends BaseActivity {
+public class WelcomeActivity extends BaseActivity {
 
-    @BindView(R.id.tv_demo_name)
-    TextView tvDemoName;
+    @BindView(R.id.btn_start_game)
+    Button btnStartGame;
+
+
+    public static void showMe(BaseActivity activity) {
+        Intent intent = new Intent(activity, WelcomeActivity.class);
+        activity.startActivity(intent);
+    }
 
     /**
      * get layoutEyeProtection to inflate
      */
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_main;
+        return R.layout.activity_welcome;
     }
 
     /**
@@ -30,19 +37,18 @@ public class MainActivity extends BaseActivity {
      */
     @Override
     protected void setupActivityComponent(ActivityComponent mActivityComponent) {
-        mActivityComponent.inject(this);
+
     }
 
     @Override
     protected void onActivityCreated(Bundle savedInstanceState) {
-        WelcomeActivity.showMe(this);
-        finish();
+
     }
 
 
-
-    public static void showMe(BaseActivity activity) {
-        Intent intent = new Intent(activity, MainMenuActivity.class);
-        activity.startActivity(intent);
+    @OnClick(R.id.btn_start_game)
+    public void startGame(){
+        SelectLevelActivity.showMe(this);
     }
+
 }
