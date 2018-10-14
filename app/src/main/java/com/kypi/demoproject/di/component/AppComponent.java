@@ -1,5 +1,6 @@
 package com.kypi.demoproject.di.component;
 
+import com.kypi.demoproject.app.sound.SoundHelper;
 import com.kypi.demoproject.di.module.AppModule;
 import com.kypi.demoproject.di.module.ConfigModule;
 import com.kypi.demoproject.di.module.RemoteModule;
@@ -25,6 +26,7 @@ import dagger.Component;
         })
 public interface AppComponent {
     SchedulerProvider schedulerProvider();
+    SoundHelper soundHelper();
 
     IReadDemoUseCase demoUseCase();
     GameConfigUseCase gameConfigUseCase();

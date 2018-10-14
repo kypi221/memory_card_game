@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.kypi.demoproject.R;
+import com.kypi.demoproject.app.sound.SoundHelper;
 import com.kypi.demoproject.base.BaseActivity;
 import com.kypi.demoproject.di.component.ActivityComponent;
 import com.kypi.demoproject.domain.entities.MemoryCard;
@@ -54,6 +55,9 @@ public class SinglePlayerGameActivity extends BaseActivity implements SinglePlay
     @Inject
     SinglePlayerPresenter presenter;
 
+    @Inject
+    SoundHelper soundHelper;
+
     // Danh sách cái view đang đc dùng
     private List<EasyFlipView> listViewManager;
 
@@ -92,10 +96,14 @@ public class SinglePlayerGameActivity extends BaseActivity implements SinglePlay
     protected void onDestroy() {
         super.onDestroy();
         presenter.detachView();
+        soundHelper.stopBgSound();
     }
 
     @Override
     public void showGame(List<MemoryCard> listCard, int colum) {
+
+        soundHelper.playBgSound();
+
         firstIndex = -1;
 
         listViewManager = new ArrayList<>();
@@ -162,6 +170,9 @@ public class SinglePlayerGameActivity extends BaseActivity implements SinglePlay
             CardHelper.faceUpCard(firstItem);
             CardHelper.faceUpCard(secondItem);
         } else {
+
+            soundHelper.playSound(SoundHelper.SOUND_GAME_CORRECT);
+
             if (firstItem != null) {
                 firstItem.setVisibility(View.INVISIBLE);
                 firstItem.setOnClickListener(null);

@@ -9,6 +9,7 @@ import com.google.gson.GsonBuilder;
 import com.kypi.demoproject.MyApplication;
 import com.kypi.demoproject.R;
 import com.kypi.demoproject.app.gson.GsonBooleanAdapter;
+import com.kypi.demoproject.app.sound.SoundHelper;
 
 import javax.inject.Singleton;
 
@@ -52,5 +53,12 @@ public class AppModule {
         return new GsonBuilder()
                 .registerTypeAdapter(Boolean.class, serializer)
                 .registerTypeAdapter(boolean.class, serializer).create();
+    }
+
+
+    @Provides
+    @Singleton
+    SoundHelper provideSoundHelper(Context context) {
+        return new SoundHelper(context);
     }
 }
