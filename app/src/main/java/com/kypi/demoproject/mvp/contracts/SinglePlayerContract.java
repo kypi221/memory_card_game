@@ -11,19 +11,17 @@ public interface SinglePlayerContract {
     public interface View extends BaseContract.View {
         void showGame(List<MemoryCard> listCard, int colum);
 
-        void updateGameTime(int timeLeft, int total);
+        void updateGameTime(long timeLeft, long total);
 
         void updateSelectedCardStatus(int selectedFirst, int selectedSecond, int status);
 
         void showVictory();
 
+        void showLose();
     }
 
     public interface Presenter extends BaseContract.BasePresenter<SinglePlayerContract.View> {
         void loadGame();
-
-        void selectedCard(int selectedIndex);
-
 
         void checkCard(int firstIndex, int secondIndex);
     }

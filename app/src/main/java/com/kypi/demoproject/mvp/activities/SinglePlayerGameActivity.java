@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.kypi.demoproject.R;
 import com.kypi.demoproject.base.BaseActivity;
@@ -28,6 +29,15 @@ public class SinglePlayerGameActivity extends BaseActivity implements SinglePlay
 
     @BindView(R.id.layout_grid)
     LinearLayout layoutGrid;
+
+    @BindView(R.id.layout_exp_bar)
+    ViewGroup layoutExpBar;
+    @BindView(R.id.layout_exp_bar_parent)
+    ViewGroup layoutExpBarParent;
+
+    @BindView(R.id.tv_time_left)
+    TextView tvTimeLeft;
+
 
     @Inject
     SinglePlayerPresenter presenter;
@@ -67,6 +77,13 @@ public class SinglePlayerGameActivity extends BaseActivity implements SinglePlay
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        presenter.detachView();
+    }
+
+    @Override
     public void showGame(List<MemoryCard> listCard, int colum) {
         listViewManager = new ArrayList<>();
         layoutGrid.removeAllViews();
@@ -84,7 +101,20 @@ public class SinglePlayerGameActivity extends BaseActivity implements SinglePlay
     }
 
     @Override
-    public void updateGameTime(int timeLeft, int total) {
+    public void updateGameTime(long timeLeft, long total) {
+
+        if(timeLeft>= 0){
+            tvTimeLeft.setText(String.valueOf(timeLeft) + " giây");
+        }
+
+        // Update progress bar
+        long percentExp = timeLeft*100 / total;
+
+        int maxHeight = layoutExpBarParent.getHeight();
+        long levelHeight = (maxHeight * percentExp)/100 ;
+        ViewGroup.LayoutParams layoutParams = layoutExpBar.getLayoutParams();
+        layoutParams.height = (int) levelHeight;
+        layoutExpBar.setLayoutParams(layoutParams);
 
     }
 
@@ -141,6 +171,12 @@ public class SinglePlayerGameActivity extends BaseActivity implements SinglePlay
         finish();
     }
 
+    @Override
+    public void showLose() {
+        CustomToast.showWarningMgs(this, "You Lose !");
+        finish();
+    }
+
 
     /**
      * Tạo 1 dòng mới
@@ -186,34 +222,31 @@ public class SinglePlayerGameActivity extends BaseActivity implements SinglePlay
         layoutParams.weight = 1;
         layoutRow.addView(itemView, layoutParams);
 
-        layoutFlipView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        layoutFlipView.setOnClickListener(v -> {
 
-                // Lấy vị trí ra
-                int position = (int) v.getTag(R.id.tag_position);
+            // Lấy vị trí ra
+            int position = (int) v.getTag(R.id.tag_position);
 
-                // Nếu position bằng với vị trí click đầu thì ko làm gì
-                if (position == firstIndex) {
-                    return;
-                }
-
-                // Lật view nếu trạng thái đang là chưa lật
-                layoutFlipView.setFlipDuration(400);
-                layoutFlipView.flipTheView();
-
-
-                // Lần đầu click thì chỉ thực hiện animation lật ( nếu đang úp )
-                if (firstIndex == -1) {
-                    firstIndex = position;
-                    return;
-                }
-
-                // nếu có rồi thì gọi check và
-                presenter.checkCard(firstIndex, position);
-                firstIndex = -1;
-
+            // Nếu position bằng với vị trí click đầu thì ko làm gì
+            if (position == firstIndex) {
+                return;
             }
+
+            // Lật view nếu trạng thái đang là chưa lật
+            layoutFlipView.setFlipDuration(400);
+            layoutFlipView.flipTheView();
+
+
+            // Lần đầu click thì chỉ thực hiện animation lật ( nếu đang úp )
+            if (firstIndex == -1) {
+                firstIndex = position;
+                return;
+            }
+
+            // nếu có rồi thì gọi check và
+            presenter.checkCard(firstIndex, position);
+            firstIndex = -1;
+
         });
 
         return layoutFlipView;

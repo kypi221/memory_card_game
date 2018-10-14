@@ -10,7 +10,6 @@ import com.kypi.demoproject.domain.usecase.GamePlayUseCase;
 import com.kypi.demoproject.mvp.contracts.SinglePlayerContract;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -18,12 +17,18 @@ import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class SinglePlayerPresenter extends BasePresenter<SinglePlayerContract.View> implements SinglePlayerContract.Presenter {
 
     public static final int STATUS_NONE = 0;            // Card đang úp xuống, chưa đụng chạm gì cả
     public static final int STATUS_FACE_UP = 1;         // Card đang lật lên, có thể là đã được chọn, hoặc được auto up
     public static final int STATUS_COMPLETE = 2;        // Card đã được chọn thành công
+
+
+    private CompositeDisposable updateTime;
 
     private static final int[] resourceList = {
             R.drawable.image_1,
@@ -53,12 +58,18 @@ public class SinglePlayerPresenter extends BasePresenter<SinglePlayerContract.Vi
             R.drawable.image_25
     };
 
+
+
     private final GameConfigUseCase gameConfigUseCase;
     private final GamePlayUseCase gamePlayUseCase;
 
+    // Biến để đánh dấu đã hoàn thành bao nhiêu cặp, để biết khi nào win game
     private int completedCount;
 
+    // Danh sách các cặp game
     private List<MemoryCard> memoryCards;
+    private long settingTime;
+    private long startTime;
 
     @Inject
     public SinglePlayerPresenter(GameConfigUseCase gameConfigUseCase, GamePlayUseCase gamePlayUseCase){
@@ -67,7 +78,15 @@ public class SinglePlayerPresenter extends BasePresenter<SinglePlayerContract.Vi
     }
 
     @Override
+    public void detachView() {
+        super.detachView();
+        updateTime.dispose();
+    }
+
+    @Override
     public void loadGame() {
+
+        updateTime = new CompositeDisposable();
 
         List<Integer> myArray = new ArrayList<>();
         for (int i = 0; i < resourceList.length; i++)
@@ -80,7 +99,6 @@ public class SinglePlayerPresenter extends BasePresenter<SinglePlayerContract.Vi
         // Nhỏ nhất
         if(memoryCards.size() == 20){
             getMvpView().showGame(memoryCards, 5);
-            return;
         }
 
         if(memoryCards.size() == 30){
@@ -99,52 +117,14 @@ public class SinglePlayerPresenter extends BasePresenter<SinglePlayerContract.Vi
             getMvpView().showGame(memoryCards, 10);
         }
 
-    }
-
-    @Override
-    public void selectedCard(int selectedIndex) {
-        // Nếu chọn lại cái card vừa chọn thì ko làm gì cả
-//        if(firstSelected == selectedIndex){
-//            return;
-//        }
-//
-//        // Nếu chưa chọn card đầu thì chọn card đầu
-//        if(firstSelected == -1){
-//            firstSelected = selectedIndex;
-//            getMvpView().updateSelectedCardStatus(firstSelected, secondSelected, STATUS_FACE_UP );
-//            return;
-//        }
-//
-//
-//        if(memoryCards.get(firstSelected).resourceId == memoryCards.get(selectedIndex).resourceId){
-//            if(completedCount == memoryCards.size() -2){
-//                getMvpView().showVictory();
-//                return;
-//            }
-//
-//            Observable.defer(() -> Observable.just("")
-//                    .delay(200, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-//                    .doOnNext(ignore -> getMvpView().updateSelectedCardStatus(firstSelected, selectedIndex, STATUS_COMPLETE))
-//                    .doOnNext(ignore -> firstSelected =  -1)
-//                    .doOnNext(ignore -> firstSelected =  -1)
-//                    .doOnNext(ignore -> completedCount += 2))
-//                    .subscribeWith(new SimpleEmptyObserver<>());
-//            return;
-//        }
-//
-//
-//        Observable.defer(() -> Observable.just("")
-//                .delay(200, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-//                .doOnNext(ignore -> getMvpView().updateSelectedCardStatus(firstSelected, selectedIndex, STATUS_NONE))
-//                .doOnNext(ignore -> firstSelected =  -1))
-//                .subscribeWith(new SimpleEmptyObserver<>());
-
+        startGameTimer();
     }
 
     @Override
     public void checkCard(int firstIndex, int secondIndex) {
         if(memoryCards.get(firstIndex).resourceId == memoryCards.get(secondIndex).resourceId){
             if(completedCount == memoryCards.size() -2){
+                updateTime.dispose();
                 getMvpView().showVictory();
                 return;
             }
@@ -162,5 +142,37 @@ public class SinglePlayerPresenter extends BasePresenter<SinglePlayerContract.Vi
                 .delay(600, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
                 .doOnNext(ignore -> getMvpView().updateSelectedCardStatus(firstIndex, secondIndex, STATUS_NONE)))
                 .subscribeWith(new SimpleEmptyObserver<>());
+    }
+
+    private void startGameTimer(){
+        settingTime = gameConfigUseCase.getSettingTime();
+        startTime = System.currentTimeMillis();
+
+        updateTime.add(Observable.interval(
+                50,
+                500,
+                TimeUnit.MILLISECONDS)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribeWith(new SimpleObserver<Long>() {
+                    @Override
+                    public void onResponse(@NonNull Long aLong) throws Exception {
+                        long currentTime = (System.currentTimeMillis() - startTime)/1000;
+                        long timeLeft = settingTime-currentTime;
+
+                        if(timeLeft <= 0){
+                            getMvpView().showLose();
+                            return;
+                        }
+
+                        getMvpView().updateGameTime(timeLeft, settingTime);
+                    }
+
+                    @Override
+                    public void onResponseError(@NonNull Throwable throwable) throws Exception {
+                        throwable.printStackTrace();
+                    }
+                }));
+
+
     }
 }

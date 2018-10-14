@@ -194,6 +194,7 @@
                 android:background="@drawable/bg_user_level_back_ground">
 
                 <RelativeLayout
+                    android:layout_alignParentBottom="true"
                     android:id="@+id/layout_exp_bar"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -203,6 +204,7 @@
 
             <TextView
                 style="@style/GameText"
+                android:id="@+id/tv_time_left"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/game_margin_medium"
