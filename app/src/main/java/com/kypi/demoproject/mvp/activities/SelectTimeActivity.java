@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.kypi.demoproject.R;
 import com.kypi.demoproject.base.BaseActivity;
@@ -17,18 +18,18 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class SelectLevelActivity extends BaseActivity {
+public class SelectTimeActivity extends BaseActivity {
 
-    @BindView(R.id.btn_start_game)
-    Button btnStartGame;
+    @BindView(R.id.edit_time)
+    EditText editTime;
 
-    private int selectedLevel = -1;
+    private long selectedTime = 0;
 
     @Inject
     GameConfigUseCase gameConfigUseCase;
 
     public static void showMe(BaseActivity activity) {
-        Intent intent = new Intent(activity, SelectLevelActivity.class);
+        Intent intent = new Intent(activity, SelectTimeActivity.class);
         activity.startActivity(intent);
     }
 
@@ -37,7 +38,7 @@ public class SelectLevelActivity extends BaseActivity {
      */
     @Override
     protected int getLayoutId() {
-        return R.layout.select_level_activity;
+        return R.layout.select_time_activity;
     }
 
     /**
@@ -52,47 +53,33 @@ public class SelectLevelActivity extends BaseActivity {
 
     @Override
     protected void onActivityCreated(Bundle savedInstanceState) {
-        btnStartGame.setVisibility(View.GONE);
-    }
-
-
-    @OnClick(R.id.btn_level_1)
-    public void selectLevel1() {
-        showDialogLevel(1, 20);
-    }
-
-    @OnClick(R.id.btn_level_2)
-    public void selectLevel2() {
-        showDialogLevel(2, 30);
-    }
-
-    @OnClick(R.id.btn_level_3)
-    public void selectLevel3() {
-        showDialogLevel(3, 40);
-    }
-
-    @OnClick(R.id.btn_level_4)
-    public void selectLevel4() {
-        showDialogLevel(4, 50);
-    }
-
-    @OnClick(R.id.btn_level_5)
-    public void selectLevel5() {
-        showDialogLevel(5, 60);
     }
 
 
     @OnClick(R.id.btn_start_game)
     public void btnStartGame() {
-        gameConfigUseCase.setSettingLevel(selectedLevel);
-        SelectTimeActivity.showMe(this);
+        String timeStr= editTime.getText().toString();
+
+        try {
+            selectedTime = Long.parseLong(timeStr);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        if(selectedTime <= 0 || selectedTime >= 10000){
+            showDialogLevel();
+            return;
+        }
+
+        gameConfigUseCase.setSettingTime(selectedTime);
+        SinglePlayerGameActivity.showMe(this);
         finish();
     }
 
-    private void showDialogLevel(int level, int totalCard) {
+    private void showDialogLevel() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Thông báo");
-        builder.setMessage("Bạn chọn cấp độ " + level + " ! Số ô là : " + totalCard);
+        builder.setMessage("Thời gian chơi game phải lớn hơn 0 và nhỏ hơn 10000");
 
 
         builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
@@ -104,8 +91,5 @@ public class SelectLevelActivity extends BaseActivity {
 
         final AlertDialog alertDialog = builder.create();
         alertDialog.show();
-
-        selectedLevel = level;
-        btnStartGame.setVisibility(View.VISIBLE);
     }
 }

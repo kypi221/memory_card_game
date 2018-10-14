@@ -45,6 +45,11 @@ public class SinglePlayerGameActivity extends BaseActivity implements SinglePlay
     @BindView(R.id.tv_current_level)
     TextView tvCurrentLevel;
 
+    @BindView(R.id.tv_help_2)
+    TextView tvHelp2;
+    @BindView(R.id.tv_help_3)
+    TextView tvHelp3;
+
 
     @Inject
     SinglePlayerPresenter presenter;
@@ -189,6 +194,16 @@ public class SinglePlayerGameActivity extends BaseActivity implements SinglePlay
     @Override
     public void showCurrentGameLevel(int level) {
         tvCurrentLevel.setText(String.valueOf(level));
+
+        if(level == 1 || level == 2){
+            tvHelp2.setVisibility(View.GONE);
+            tvHelp3.setVisibility(View.GONE);
+        }
+
+        else if( level == 3 || level == 4){
+            tvHelp3.setVisibility(View.GONE);
+        }
+
     }
 
     @Override
@@ -323,7 +338,6 @@ public class SinglePlayerGameActivity extends BaseActivity implements SinglePlay
             firstIndex = -1;
 
         });
-
 
         return layoutFlipView;
     }

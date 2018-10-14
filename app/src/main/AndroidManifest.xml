@@ -45,6 +45,9 @@
         <activity
             android:name=".mvp.activities.SelectLevelActivity"
             android:screenOrientation="landscape" />
+        <activity
+            android:name=".mvp.activities.SelectTimeActivity"
+            android:screenOrientation="landscape" />
     </application>
 
 </manifest>

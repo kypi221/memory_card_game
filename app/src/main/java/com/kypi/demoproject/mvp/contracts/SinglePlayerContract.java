@@ -26,6 +26,7 @@ public interface SinglePlayerContract {
         void toolFaceUp(int firstItem, int secondItem);
 
         void toolRemoveCouple(int firstIndex, int secondIndex);
+
     }
 
     public interface Presenter extends BaseContract.BasePresenter<SinglePlayerContract.View> {
