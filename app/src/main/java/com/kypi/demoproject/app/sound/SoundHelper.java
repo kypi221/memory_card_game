@@ -19,6 +19,8 @@ public class SoundHelper {
 
     private int playingSoundIndex = -1;
 
+    private boolean isSoundOn = true;
+
     public SoundHelper(Context context) {
         listMediaPlayers[SOUND_GAME_CORRECT] = MediaPlayer.create(context, R.raw.correct_answer);
         bgSound = MediaPlayer.create(context, R.raw.bg_music);
@@ -34,6 +36,10 @@ public class SoundHelper {
     }
 
     public void playSound(int soundID) {
+        if(!isSoundOn){
+            return;
+        }
+
         if (playingSoundIndex != -1 && listMediaPlayers[playingSoundIndex].isPlaying()) {
             listMediaPlayers[playingSoundIndex].pause();
         }
@@ -52,4 +58,18 @@ public class SoundHelper {
     }
 
 
+    public void toggleSound() {
+        isSoundOn = !isSoundOn;
+
+        if(isSoundOn){
+            playBgSound();
+        }
+        else {
+            stopBgSound();
+        }
+    }
+
+    public boolean isSoundOn(){
+        return isSoundOn;
+    }
 }

@@ -50,6 +50,8 @@ public class SinglePlayerGameActivity extends BaseActivity implements SinglePlay
     TextView tvHelp2;
     @BindView(R.id.tv_help_3)
     TextView tvHelp3;
+    @BindView(R.id.tv_toggle_sound)
+    TextView tvToggleSound;
 
 
     @Inject
@@ -90,19 +92,37 @@ public class SinglePlayerGameActivity extends BaseActivity implements SinglePlay
     protected void onActivityCreated(Bundle savedInstanceState) {
         presenter.attachView(this);
         presenter.loadGame();
+
+        if(soundHelper.isSoundOn()){
+            tvToggleSound.setText("Tắt âm thanh");
+        }
+        else {
+            tvToggleSound.setText("Mở âm thanh");
+        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         presenter.detachView();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        soundHelper.playBgSound();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
         soundHelper.stopBgSound();
     }
 
     @Override
     public void showGame(List<MemoryCard> listCard, int colum) {
-
-        soundHelper.playBgSound();
 
         firstIndex = -1;
 
@@ -275,6 +295,18 @@ public class SinglePlayerGameActivity extends BaseActivity implements SinglePlay
     @OnClick({R.id.tv_exit, R.id.tv_replay})
     public void exitClicked(View view){
         onBackPressed();
+    }
+
+    @OnClick(R.id.tv_toggle_sound)
+    public void btnToggleSound(View view){
+        soundHelper.toggleSound();
+
+        if(soundHelper.isSoundOn()){
+            tvToggleSound.setText("Tắt âm thanh");
+        }
+        else {
+            tvToggleSound.setText("Mở âm thanh");
+        }
     }
 
 
