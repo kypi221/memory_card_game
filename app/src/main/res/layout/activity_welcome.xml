@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:orientation="vertical">
+
+    <include layout="@layout/layout_header"></include>
+
+    <LinearLayout
+        android:layout_width="1440px"
+        android:layout_height="643px"
+        android:layout_gravity="center_horizontal"
+        android:background="@color/colorAccent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Welcome"
+            android:textColor="@color/black"
+            android:textSize="100px"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10px"
+            android:text="Luật chơi:"
+            android:textColor="@color/black"
+            android:textSize="40px" />
+
+        <TextView
+            android:layout_width="985px"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20px"
+            android:gravity="center"
+            android:text="Nhiệm vụ người chơi sẽ lật tìm các cặp ô có nón bảo hiểm giống nhau đang ẩn dưới màn hình."
+            android:textColor="@color/black"
+            android:textSize="30px" />
+
+        <TextView
+            android:layout_width="985px"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="40px"
+            android:layout_marginTop="20px"
+            android:gravity="center"
+            android:text="Hoàn thành thử thách khi tìm ra tất cả các cặp giống nhau trong thời gian quy định để giành chiến thắng."
+            android:textColor="@color/black"
+            android:textSize="30px" />
+
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/btn_start_game"
+        android:layout_width="547px"
+        android:layout_height="60px"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="80px"
+        android:background="#bfbfbf"
+        android:textSize="30px"
+        android:text="Vào game" />
+
+</LinearLayout>

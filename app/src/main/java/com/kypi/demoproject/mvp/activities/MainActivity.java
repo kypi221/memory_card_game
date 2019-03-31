@@ -1,5 +1,6 @@
 package com.kypi.demoproject.mvp.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -34,7 +35,14 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void onActivityCreated(Bundle savedInstanceState) {
-        MainMenuActivity.showMe(this);
+        WelcomeActivity.showMe(this);
         finish();
+    }
+
+
+
+    public static void showMe(BaseActivity activity) {
+        Intent intent = new Intent(activity, MainMenuActivity.class);
+        activity.startActivity(intent);
     }
 }

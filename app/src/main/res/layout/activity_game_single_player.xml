@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:orientation="vertical"
+    android:weightSum="10">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:orientation="horizontal"
+        android:padding="@dimen/margin_8">
+
+        <ImageView
+            android:layout_width="200px"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/margin_8"
+            android:adjustViewBounds="true"
+            android:src="@drawable/image_logo_left" />
+
+        <ImageView
+            android:src="@drawable/img_banner"
+            android:layout_width="0dp"
+            android:adjustViewBounds="true"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:layout_width="200px"
+            android:layout_height="match_parent"
+            android:layout_marginRight="@dimen/margin_8"
+            android:adjustViewBounds="true"
+            android:src="@drawable/image_logo_right" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="8"
+        android:orientation="horizontal"
+        android:weightSum="10">
+
+        <LinearLayout
+
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/GameText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/game_margin_xlarge"
+                android:gravity="center"
+                android:text="Cấp độ" />
+
+
+            <TextView
+                android:id="@+id/tv_current_level"
+                style="@style/GameText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="1" />
+
+            <TextView
+                style="@style/GameText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/game_margin_xlarge"
+                android:text="Điểm số" />
+
+
+            <TextView
+                android:id="@+id/tv_current_point"
+                style="@style/GameText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="1000" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="8"
+            android:orientation="vertical"
+            android:weightSum="10">
+
+            <LinearLayout
+                android:id="@+id/layout_grid"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="8"
+                android:background="@color/home_divider"
+                android:orientation="vertical">
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_toggle_sound"
+                    style="@style/GameTextSmaller"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/game_margin_small"
+                    android:text="Tắt Âm thanh" />
+
+                <TextView
+                    android:id="@+id/tv_exit"
+                    style="@style/GameTextSmaller"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/game_margin_large"
+                    android:layout_marginTop="@dimen/game_margin_small"
+                    android:text="Thoát" />
+
+                <TextView
+                    android:id="@+id/tv_replay"
+                    style="@style/GameTextSmaller"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="70px"
+                    android:layout_marginTop="@dimen/game_margin_small"
+                    android:text="Chơi lại" />
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"></RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="40px"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_help"
+                        style="@style/GameTextSmaller"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/game_margin_small"
+                        android:text="Trợ giúp" />
+
+                    <TextView
+                        android:id="@+id/tv_help_1"
+                        style="@style/GameHelpText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Lật ô" />
+
+                    <TextView
+                        android:id="@+id/tv_help_2"
+                        style="@style/GameHelpText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Mất ô" />
+
+                    <TextView
+                        android:id="@+id/tv_help_3"
+                        style="@style/GameHelpText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Thêm 5s" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/layout_exp_bar_parent"
+                android:layout_width="40px"
+                android:layout_height="600px"
+                android:background="@drawable/bg_user_level_back_ground">
+
+                <RelativeLayout
+                    android:layout_alignParentBottom="true"
+                    android:id="@+id/layout_exp_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_user_level_progress_bar"></RelativeLayout>
+
+            </RelativeLayout>
+
+            <TextView
+                style="@style/GameText"
+                android:id="@+id/tv_time_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/game_margin_medium"
+                android:textAllCaps="false"
+                android:text="Thời Gian" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
