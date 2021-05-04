@@ -1,6 +1,6 @@
 # memory card game
 
-Game viết cho 1 dự án freelance : Game Trúc xanh
+Game Trúc xanh
 
 ## Gồm các tính năng
 
